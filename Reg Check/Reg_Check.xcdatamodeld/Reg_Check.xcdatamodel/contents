@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19G2021" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Event" representedClassName=".Event" syncable="YES">
+        <attribute name="eventEndTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="eventName" optional="YES" attributeType="String"/>
+        <attribute name="eventStartTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+    </entity>
     <entity name="Person" representedClassName=".Person" syncable="YES">
         <attribute name="email" optional="YES" attributeType="String"/>
         <attribute name="emailed" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -9,11 +14,15 @@
         <attribute name="imported" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="importedImg" optional="YES" attributeType="Binary"/>
         <attribute name="lastName" optional="YES" attributeType="String"/>
+        <attribute name="memAfro" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="membershipID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="memKizomba" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="memSemba" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="memTarraxinha" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="mobilePhone" optional="YES" attributeType="String"/>
         <attribute name="phone" optional="YES" attributeType="String"/>
     </entity>
-    <entity name="Visitor" representedClassName="Visitor" syncable="YES">
+    <entity name="Visitor" representedClassName=".Visitor" syncable="YES">
         <attribute name="dateScanned" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="email" optional="YES" attributeType="String"/>
         <attribute name="firstName" optional="YES" attributeType="String"/>
@@ -23,7 +32,8 @@
         <attribute name="phone" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="Person" positionX="-63" positionY="-18" width="128" height="208"/>
+        <element name="Person" positionX="-63" positionY="-18" width="128" height="268"/>
         <element name="Visitor" positionX="-63" positionY="36" width="128" height="148"/>
+        <element name="Event" positionX="-63" positionY="63" width="128" height="88"/>
     </elements>
 </model>

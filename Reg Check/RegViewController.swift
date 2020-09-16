@@ -34,12 +34,46 @@ class RegViewController: UIViewController, UITextFieldDelegate {
         filter.delegate = self
         
         
-        NotificationCenter.default.addObserver(self, selector: #selector(didGetNotificationAddPerson(_:)), name: Notification.Name("AddPerson"), object: nil)
-        
+//        NotificationCenter.default.addObserver(self, selector: #selector(didGetNotificationAddPerson(_:)), name: Notification.Name("AddPerson"), object: nil)
+//
         NotificationCenter.default.addObserver(self, selector: #selector(didGetNotificationEmailPerson(_:)), name: Notification.Name("EmailPerson"), object: nil)
         
-         NotificationCenter.default.addObserver(self, selector: #selector(didGetNotificationEditPerson(_:)), name: Notification.Name("EditPerson"), object: nil)
+//         NotificationCenter.default.addObserver(self, selector: #selector(didGetNotificationEditPerson(_:)), name: Notification.Name("EditPerson"), object: nil)
         self.fetchPeople()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
+    {
+        if segue.identifier == "editPerson"
+        {
+            if let vc = segue.destination as? AddPersonViewController
+            {
+                vc.person = (sender as! Person)
+            }
+        }
+    }
+    
+    @IBAction func cancelPerson(_ unwindSegue: UIStoryboardSegue) {}
+    
+    @IBAction func savePerson(_ unwindSegue: UIStoryboardSegue)
+    {
+        if let vc = unwindSegue.source as? AddPersonViewController
+        {
+            var notFound = true
+            for (index, old) in people.enumerated() {
+                if old.membershipID == vc.person?.membershipID
+                {
+                    people[index] = vc.person!
+                    notFound = false
+                    break
+                }
+            }
+            
+            if notFound {people.append(vc.person!)}
+            
+            PersistenceService.saveContext()
+            self.tableView.reloadData()
+        }
     }
     
     func fetchPeople()
@@ -327,6 +361,7 @@ extension RegViewController: UITableViewDataSource, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath:  IndexPath)
     {
+        performSegue(withIdentifier: "editPerson", sender: people[indexPath.row])
 //        print("selected by view controller")
 //        people.remove(at: indexPath.row)//let selectIndex = indexPath.row
 //        tableView.reloadData()
@@ -340,7 +375,6 @@ extension RegViewController: UITableViewDataSource, UITableViewDelegate
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete
         {
-            
             PersistenceService.context.delete(people[indexPath.row])
             PersistenceService.saveContext()
             self.fetchPeople()

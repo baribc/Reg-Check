@@ -15,6 +15,9 @@
 		5524C27B2503B66D0048B7B6 /* Visitor+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5524C2772503B66D0048B7B6 /* Visitor+CoreDataProperties.swift */; };
 		5524C27D2503CA3D0048B7B6 /* VisitsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5524C27C2503CA3D0048B7B6 /* VisitsViewController.swift */; };
 		5524C27F2503CC4C0048B7B6 /* tblVisitorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5524C27E2503CC4C0048B7B6 /* tblVisitorCell.swift */; };
+		554D087A25109B2E00F233FE /* ManageEventVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554D087925109B2E00F233FE /* ManageEventVC.swift */; };
+		554D087D2510C94E00F233FE /* Event+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554D087B2510C94E00F233FE /* Event+CoreDataClass.swift */; };
+		554D087E2510C94E00F233FE /* Event+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554D087C2510C94E00F233FE /* Event+CoreDataProperties.swift */; };
 		55B8637024FA78C100B28031 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8636F24FA78C100B28031 /* AppDelegate.swift */; };
 		55B8637224FA78C100B28031 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8637124FA78C100B28031 /* SceneDelegate.swift */; };
 		55B8637424FA78C100B28031 /* RegViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8637324FA78C100B28031 /* RegViewController.swift */; };
@@ -41,6 +44,9 @@
 		5524C2772503B66D0048B7B6 /* Visitor+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Visitor+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		5524C27C2503CA3D0048B7B6 /* VisitsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitsViewController.swift; sourceTree = "<group>"; };
 		5524C27E2503CC4C0048B7B6 /* tblVisitorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tblVisitorCell.swift; sourceTree = "<group>"; };
+		554D087925109B2E00F233FE /* ManageEventVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageEventVC.swift; sourceTree = "<group>"; };
+		554D087B2510C94E00F233FE /* Event+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+CoreDataClass.swift"; sourceTree = "<group>"; };
+		554D087C2510C94E00F233FE /* Event+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		55B8636C24FA78C100B28031 /* Event CheckIn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Event CheckIn.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		55B8636F24FA78C100B28031 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		55B8637124FA78C100B28031 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -74,10 +80,6 @@
 		55B8636324FA78C100B28031 = {
 			isa = PBXGroup;
 			children = (
-				5524C2742503B66D0048B7B6 /* Person+CoreDataClass.swift */,
-				5524C2752503B66D0048B7B6 /* Person+CoreDataProperties.swift */,
-				5524C2762503B66D0048B7B6 /* Visitor+CoreDataClass.swift */,
-				5524C2772503B66D0048B7B6 /* Visitor+CoreDataProperties.swift */,
 				55E6873524FE11D50004273C /* Model */,
 				55B8636E24FA78C100B28031 /* Reg Check */,
 				55B8636D24FA78C100B28031 /* Products */,
@@ -105,6 +107,7 @@
 				55B8637324FA78C100B28031 /* RegViewController.swift */,
 				5524C2622502F2410048B7B6 /* AddPersonViewController.swift */,
 				5511514E2507B86600A4698A /* settingsViewController.swift */,
+				554D087925109B2E00F233FE /* ManageEventVC.swift */,
 				55E6873A24FE29550004273C /* tblPeopleCell.swift */,
 				5524C27E2503CC4C0048B7B6 /* tblVisitorCell.swift */,
 				5524C27C2503CA3D0048B7B6 /* VisitsViewController.swift */,
@@ -122,6 +125,12 @@
 		55E6873524FE11D50004273C /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				554D087B2510C94E00F233FE /* Event+CoreDataClass.swift */,
+				554D087C2510C94E00F233FE /* Event+CoreDataProperties.swift */,
+				5524C2742503B66D0048B7B6 /* Person+CoreDataClass.swift */,
+				5524C2752503B66D0048B7B6 /* Person+CoreDataProperties.swift */,
+				5524C2762503B66D0048B7B6 /* Visitor+CoreDataClass.swift */,
+				5524C2772503B66D0048B7B6 /* Visitor+CoreDataProperties.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -203,11 +212,14 @@
 			files = (
 				55B8637424FA78C100B28031 /* RegViewController.swift in Sources */,
 				55B8638724FA887700B28031 /* KioskViewController.swift in Sources */,
+				554D087D2510C94E00F233FE /* Event+CoreDataClass.swift in Sources */,
+				554D087E2510C94E00F233FE /* Event+CoreDataProperties.swift in Sources */,
 				55B8638924FB38E900B28031 /* Utility.swift in Sources */,
 				5524C2632502F2410048B7B6 /* AddPersonViewController.swift in Sources */,
 				55B8637A24FA78C100B28031 /* Reg_Check.xcdatamodeld in Sources */,
 				5524C27D2503CA3D0048B7B6 /* VisitsViewController.swift in Sources */,
 				5524C27A2503B66D0048B7B6 /* Visitor+CoreDataClass.swift in Sources */,
+				554D087A25109B2E00F233FE /* ManageEventVC.swift in Sources */,
 				5511514F2507B86600A4698A /* settingsViewController.swift in Sources */,
 				5524C27F2503CC4C0048B7B6 /* tblVisitorCell.swift in Sources */,
 				55B8637024FA78C100B28031 /* AppDelegate.swift in Sources */,

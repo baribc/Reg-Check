@@ -15,6 +15,7 @@ class VisitsViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var filter: UITextField!
     @IBOutlet weak var btnExport: UIButton!
+    @IBOutlet weak var btnDeleteAll: UIButton!
     
     var visits = [Visitor]()
     var filteredVisits = [Visitor]()
@@ -48,6 +49,19 @@ class VisitsViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         {
         }
     }
+    
+    @IBAction func deleteAll(_ sender: Any)
+    {
+        for visitor in visits
+        {
+            PersistenceService.context.delete(visitor)
+            PersistenceService.saveContext()
+        }
+        self.fetchVisits()
+        
+    }
+    
+    
     @IBAction func editingChanged(_ sender: UITextField)
     {
         filteredVisits.removeAll()

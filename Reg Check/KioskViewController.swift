@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 import CoreData
+//import SQLite3
 
 class KioskViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate, UITabBarControllerDelegate {
     
@@ -18,25 +19,33 @@ class KioskViewController: UIViewController, AVCaptureMetadataOutputObjectsDeleg
     @IBOutlet weak var imgTick: UIImageView!
     @IBOutlet weak var imgCross: UIImageView!
     @IBOutlet weak var scannedMessage: UILabel!
+    @IBOutlet weak var eventLabel: UILabel!
     
     let defaults = UserDefaults.standard
+    
+    var eventTimer: Timer?
     var KioskFail = ""
     
     var captureSession: AVCaptureSession!
     var previewLayer: AVCaptureVideoPreviewLayer!
     var people = [Person]()
     var visits = [Visitor]()
+    var events = [Event]()
+   
     var timer = Timer()
     var scanFound = false
     
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool)
+    {
         
-        guard let _ = defaults.value(forKey: "CODE") as? String else {
+        guard let _ = defaults.value(forKey: "CODE") as? String else
+        {
             self.tabBarController?.selectedIndex = 3
             return
         }
         getDefaults()
         fetchData()
+        setCurrentEvent()
         captureSession.startRunning()
         
     }
@@ -93,12 +102,22 @@ class KioskViewController: UIViewController, AVCaptureMetadataOutputObjectsDeleg
             self.people = try PersistenceService.context.fetch(fetchPeople)
         }
         catch{}
+        
         let fetchVisits: NSFetchRequest <Visitor> = Visitor.fetchRequest()
         do
         {
             self.visits = try PersistenceService.context.fetch(fetchVisits)
         }
         catch{}
+        
+        let fetchEvents: NSFetchRequest <Event> = Event.fetchRequest()
+        do
+        {
+            self.events = try PersistenceService.context.fetch(fetchEvents)
+        }
+        catch{}
+        
+        
     }
     
     @objc func scannerStart()
@@ -122,7 +141,7 @@ class KioskViewController: UIViewController, AVCaptureMetadataOutputObjectsDeleg
         {
             imgCross.isHidden = false
             scannedMessage.text = KioskFail
-             AudioServicesPlaySystemSound(1301)
+            AudioServicesPlaySystemSound(1301)
         }
         responseTick.isHidden=false
     }
@@ -237,6 +256,91 @@ class KioskViewController: UIViewController, AVCaptureMetadataOutputObjectsDeleg
         }
         
     }
+    
+    func setCurrentEvent()
+    {
+        for event in events {
+            let eventDay = Calendar.current.component(.weekday, from: event.eventStartTime!)
+            let currentDay = Calendar.current.component(.weekday, from: Date())
+            print(eventDay, currentDay)
+            
+            if eventDay == currentDay
+            {
+                let eventStartHour = Double(Calendar.current.component(.hour, from: event.eventStartTime!)) * 100
+                let eventEndHour = Double(Calendar.current.component(.hour, from: event.eventEndTime!)) * 100
+                let currentHour = Double(Calendar.current.component(.hour, from: Date())) * 100
+                print(eventStartHour, eventEndHour, currentHour)
+                let eventStartMin = Double(Calendar.current.component(.minute, from: event.eventStartTime!))
+                let eventEndMin = Double(Calendar.current.component(.minute, from: event.eventEndTime!))
+                let currentMin = Double(Calendar.current.component(.minute, from: Date()))
+                print(eventStartMin, eventEndMin, currentMin)
+                let startTime = eventStartHour + eventStartMin
+                let endTime = eventEndHour + eventEndMin
+                let currenTime = currentHour + currentMin
+                print(startTime, endTime, currenTime)
+//                let curr = Date().timeIntervalSince1970
+//                let start = event.eventStartTime!.timeIntervalSince1970
+//                let end = event.eventEndTime!.timeIntervalSince1970
+//
+                
+                
+                
+                if currenTime >= (startTime - 30) && currenTime <= (endTime - 30)
+                {
+                    
+                    eventLabel.text = "Event " + event.eventName!
+                    eventTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true)
+                    { timer in
+                        // self.timeCounterCurrentEvent(event: event)
+                    }
+                    
+                    return
+                } else if currentHour < eventStartHour {
+                    
+                    eventLabel.text = "Up Next\n " + event.eventName!
+                    eventTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true)
+                    { timer in
+                        // self.timeCounterComingEvent(event: event)
+                    }
+                    return
+                }
+                
+            }
+            
+            eventLabel.text = "No Events Scheduled!"
+        }
+        
+    }
+    
+    func timeCounterCurrentEvent (event: Event) {
+           
+           let dateRangeStart = Date()
+           let dateRangeEnd = event.eventEndTime
+           //let components = Calendar.current.dateComponents([.day, .hour, .minute, .second], from: dateRangeStart, to: dateRangeEnd)
+           
+           //timerLabel.text = "\(components.hour!):\(components.minute!):\(components.second!)"
+           
+        if dateRangeStart > dateRangeEnd!
+           {
+            eventTimer!.invalidate()
+           }
+           
+       }
+       
+       func timeCounterComingEvent (event: Event) {
+           
+           let dateRangeStart = Date()
+           let dateRangeEnd = event.eventStartTime
+          // let components = Calendar.current.dateComponents([.day, .hour, .minute, .second], from: dateRangeStart, to: dateRangeEnd)
+           
+           //timerLabel.text = "Days:\(components.day!) and \(components.hour!):\(components.minute!):\(components.second!)"
+           
+        if dateRangeStart > dateRangeEnd!
+           {
+            eventTimer!.invalidate()
+           }
+           
+       }
 
 }
 class NavigationStack {

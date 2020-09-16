@@ -28,6 +28,11 @@ extension Person {
     @NSManaged public var emailedImg: Data?
     @NSManaged public var imported: Date?
     @NSManaged public var importedImg: Data?
+    @NSManaged public var memKizomba: Int
+    @NSManaged public var memSemba: Int
+    @NSManaged public var memAfro: Int
+    @NSManaged public var memTarraxinha: Int
+    
     
     
 

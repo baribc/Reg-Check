@@ -50,11 +50,11 @@ class tblPeopleCell: UITableViewCell {
         }
         NotificationCenter.default.post(name: Notification.Name("EmailPerson"), object: person)
     }
-    @IBAction func btnEdit(_ sender: Any)
-    {
-       let person = localPerson
-       NotificationCenter.default.post(name: Notification.Name("EditPerson"), object: person)
-    }
+//    @IBAction func btnEdit(_ sender: Any)
+//    {
+//       let person = localPerson
+//       NotificationCenter.default.post(name: Notification.Name("EditPerson"), object: person)
+//    }
     func clear()
     {
         cellImage.image = nil
