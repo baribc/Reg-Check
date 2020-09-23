@@ -83,7 +83,7 @@ class settingsViewController: UIViewController
                
             }
             
-            if notFound {events.append(vc.event!)}
+            if notFound && vc.event?.eventName != nil {events.append(vc.event!)}
             
             PersistenceService.saveContext()
             self.tableView.reloadData()
@@ -130,9 +130,13 @@ extension settingsViewController: UITableViewDelegate, UITableViewDataSource {
                df.locale = .current
                df.dateFormat = "EEEE hh:mm a"
         let cell = tableView.dequeueReusableCell(withIdentifier: "CELL", for: indexPath)
+        if events[indexPath.row].eventStartTime != nil {
         let startDate = df.string(from: events[indexPath.row].eventStartTime!)
         let endDate = df.string(from: events[indexPath.row].eventEndTime!)
-        cell.textLabel?.text = events[indexPath.row].eventName! + " - " + startDate + " - " + endDate
+        var eventPrice = ""
+            if events[indexPath.row].eventPrice != nil {eventPrice = events[indexPath.row].eventPrice! }
+            cell.textLabel?.text = events[indexPath.row].eventName! + " - " + eventPrice + " - " + startDate + " - " + endDate
+        }
         return cell
     }
     

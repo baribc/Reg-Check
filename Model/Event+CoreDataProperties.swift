@@ -19,7 +19,9 @@ extension Event {
 
     
     @NSManaged public var eventName: String?
+    @NSManaged public var eventPrice: String?
     @NSManaged public var eventStartTime: Date?
     @NSManaged public var eventEndTime: Date?
+    @NSManaged public var eventCategory: String?
 
 }

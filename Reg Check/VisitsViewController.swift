@@ -86,7 +86,7 @@ class VisitsViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         let filePath = self.getDocumentsDirectory().appendingPathComponent("visitors.csv")
         do
         {
-            var content = "MembershipID, First Name, Last Name, Mobile Phone, Email, Phone, Date, Time\n"
+            var content = "MembershipID, First Name, Last Name, Mobile Phone, Email, Phone, Date, Time, Event\n"
             for p in visits
             {
                 if p.mobilePhone == nil  { p.mobilePhone = ""}
@@ -96,7 +96,7 @@ class VisitsViewController: UIViewController, UITextFieldDelegate, UITableViewDa
                 df.locale = .current
                 df.dateFormat = "d/MM/Y, hh:mm a"
                 let dateScanned = df.string(from: p.dateScanned!)
-                let line  = String(p.membershipID) + ", " + p.firstName! + ", " + p.lastName! + ", " + p.mobilePhone! + ", " + p.email! + ", " + p.phone! + ", " + dateScanned + "\n"
+                let line  = String(p.membershipID) + ", " + p.firstName! + ", " + p.lastName! + ", " + p.mobilePhone! + ", " + p.email! + ", " + p.phone! + ", " + dateScanned + ", " + p.event! + "\n"
                 content += line
             }
             try content.write(to: filePath, atomically: true, encoding: .utf8)

@@ -93,25 +93,25 @@ class RegViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    @objc func didGetNotificationAddPerson(_ notification: Notification)
-    {
-        guard let person = notification.object as! Person? else { return  }
-        people.append(person)
-        PersistenceService.saveContext()
-        self.tableView.reloadData()
-    }
+//    @objc func didGetNotificationAddPerson(_ notification: Notification)
+//    {
+//        guard let person = notification.object as! Person? else { return  }
+//        people.append(person)
+//        PersistenceService.saveContext()
+//        self.tableView.reloadData()
+//    }
     @objc func didGetNotificationEmailPerson(_ notification: Notification)
     {
         guard let person = notification.object as! Person? else { return  }
         showMailComposer(person: person)
     }
-    @objc func didGetNotificationEditPerson(_ notification: Notification)
-    {
-        guard let person = notification.object as! Person? else { return  }
-        person.membershipID = getID(person: person)
-        PersistenceService.saveContext()
-        tableView.reloadData()
-    }
+//    @objc func didGetNotificationEditPerson(_ notification: Notification)
+//    {
+//        guard let person = notification.object as! Person? else { return  }
+//        person.membershipID = getID(person: person)
+//        PersistenceService.saveContext()
+//        tableView.reloadData()
+//    }
    
     
     @IBAction func btnAddNew()

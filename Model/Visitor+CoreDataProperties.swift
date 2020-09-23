@@ -24,5 +24,7 @@ extension Visitor {
     @NSManaged public var email: String?
     @NSManaged public var mobilePhone: String?
     @NSManaged public var phone: String?
+    @NSManaged public var event: String?
+    
 
 }

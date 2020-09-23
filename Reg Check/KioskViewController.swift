@@ -22,7 +22,9 @@ class KioskViewController: UIViewController, AVCaptureMetadataOutputObjectsDeleg
     @IBOutlet weak var eventLabel: UILabel!
     
     let defaults = UserDefaults.standard
-    
+    var CheckedInEvent: String = ""
+    var CheckedInEventCategory: String = ""
+    var CheckedInEventPrice: String = ""
     var eventTimer: Timer?
     var KioskFail = ""
     
@@ -55,6 +57,7 @@ class KioskViewController: UIViewController, AVCaptureMetadataOutputObjectsDeleg
         
         super.viewDidLoad()
         getDefaults()
+        eventTimer = Timer.scheduledTimer(timeInterval: 60,  target:self, selector: #selector(setCurrentEvent), userInfo: nil, repeats: true)
         self.tabBarController?.delegate = self
         self.responseTick.isHidden = true
         imgTick.isHidden = true
@@ -129,18 +132,24 @@ class KioskViewController: UIViewController, AVCaptureMetadataOutputObjectsDeleg
         
     }
     
-    func scanResponse(pass: Bool, name: String)
+    func scanResponse(pass: Bool, name: String, paid: Bool)
     {
-        if pass
+        if pass && paid
         {
             imgTick.isHidden = false
             scannedMessage.text = "Welcome " + name
             AudioServicesPlaySystemSound(1308)
         }
+        else if pass && !paid
+        {
+            imgCross.isHidden = false
+            scannedMessage.text = "Welcome " + name + "\n Event is " + CheckedInEventPrice
+            AudioServicesPlaySystemSound(1301)
+        }
         else
         {
             imgCross.isHidden = false
-            scannedMessage.text = KioskFail
+            scannedMessage.text = KioskFail + " Event is " + CheckedInEventPrice
             AudioServicesPlaySystemSound(1301)
         }
         responseTick.isHidden=false
@@ -149,7 +158,7 @@ class KioskViewController: UIViewController, AVCaptureMetadataOutputObjectsDeleg
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection)
     {
         captureSession.stopRunning()
-        timer = Timer.scheduledTimer(timeInterval: 2,  target:self, selector: #selector(scannerStart), userInfo: nil, repeats: false)
+        timer = Timer.scheduledTimer(timeInterval: 4,  target:self, selector: #selector(scannerStart), userInfo: nil, repeats: false)
         
         if let metadataObject = metadataObjects.first
         {
@@ -179,19 +188,54 @@ class KioskViewController: UIViewController, AVCaptureMetadataOutputObjectsDeleg
                 currentVisitor.email = foundPerson.email
                 currentVisitor.mobilePhone = foundPerson.mobilePhone
                 currentVisitor.phone    = foundPerson.phone
+                currentVisitor.event = CheckedInEvent
                 visits.append(currentVisitor)
-                scanResponse(pass: true, name: foundPerson.firstName!)
+                scanResponse(pass: true, name: foundPerson.firstName!, paid: paid(person: foundPerson))
                 PersistenceService.saveContext()
                 
             }
             else
             {
-                scanResponse(pass: false, name: "")
+                scanResponse(pass: false, name: CheckedInEvent, paid: false)
             }
         }
         scanFound = false
     }
 
+    func paid(person: Person) -> Bool
+    {
+        switch CheckedInEventCategory
+        {
+        case "Kizomba":
+            if person.memKizomba == 1
+            {
+                return true
+            }
+            return false
+        case "Semba":
+            if person.memSemba == 1
+            {
+                return true
+            }
+            return false
+        case "Afro":
+            if person.memAfro == 1
+            {
+                return true
+            }
+            return false
+        case "Tarraxinha":
+            if person.memTarraxinha == 1
+            {
+                return true
+            }
+            return false
+            
+        default:
+            return false
+        }
+    }
+    
     func failed() {
         let ac = UIAlertController(title: "Scanning not supported", message: "Your device does not support scanning a code from an item. Please use a device with a camera.", preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "OK", style: .default))
@@ -257,60 +301,66 @@ class KioskViewController: UIViewController, AVCaptureMetadataOutputObjectsDeleg
         
     }
     
-    func setCurrentEvent()
+    @objc func setCurrentEvent()
     {
-        for event in events {
-            let eventDay = Calendar.current.component(.weekday, from: event.eventStartTime!)
-            let currentDay = Calendar.current.component(.weekday, from: Date())
-            print(eventDay, currentDay)
-            
-            if eventDay == currentDay
-            {
-                let eventStartHour = Double(Calendar.current.component(.hour, from: event.eventStartTime!)) * 100
-                let eventEndHour = Double(Calendar.current.component(.hour, from: event.eventEndTime!)) * 100
-                let currentHour = Double(Calendar.current.component(.hour, from: Date())) * 100
-                print(eventStartHour, eventEndHour, currentHour)
-                let eventStartMin = Double(Calendar.current.component(.minute, from: event.eventStartTime!))
-                let eventEndMin = Double(Calendar.current.component(.minute, from: event.eventEndTime!))
-                let currentMin = Double(Calendar.current.component(.minute, from: Date()))
-                print(eventStartMin, eventEndMin, currentMin)
-                let startTime = eventStartHour + eventStartMin
-                let endTime = eventEndHour + eventEndMin
-                let currenTime = currentHour + currentMin
-                print(startTime, endTime, currenTime)
-//                let curr = Date().timeIntervalSince1970
-//                let start = event.eventStartTime!.timeIntervalSince1970
-//                let end = event.eventEndTime!.timeIntervalSince1970
-//
+        for event in events
+        {
+            if event.eventStartTime != nil {
+                let eventDay = Calendar.current.component(.weekday, from: event.eventStartTime!)
+                let currentDay = Calendar.current.component(.weekday, from: Date())
+                //print(eventDay, currentDay)
                 
-                
-                
-                if currenTime >= (startTime - 30) && currenTime <= (endTime - 30)
+                if eventDay == currentDay
                 {
+                    let eventStartHour = Double(Calendar.current.component(.hour, from: event.eventStartTime!)) * 100
+                    let eventEndHour = Double(Calendar.current.component(.hour, from: event.eventEndTime!)) * 100
+                    let currentHour = Double(Calendar.current.component(.hour, from: Date())) * 100
+                    //print(eventStartHour, eventEndHour, currentHour)
+                    let eventStartMin = Double(Calendar.current.component(.minute, from: event.eventStartTime!))
+                    let eventEndMin = Double(Calendar.current.component(.minute, from: event.eventEndTime!))
+                    let currentMin = Double(Calendar.current.component(.minute, from: Date()))
+                    //print(eventStartMin, eventEndMin, currentMin)
+                    let startTime = eventStartHour + eventStartMin
+                    let endTime = eventEndHour + eventEndMin
+                    let currenTime = currentHour + currentMin
+                    print(startTime, endTime, currenTime)
                     
-                    eventLabel.text = "Event " + event.eventName!
-                    eventTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true)
-                    { timer in
-                        // self.timeCounterCurrentEvent(event: event)
+                    if currenTime >= (startTime - 30) && currenTime <= (endTime - 30)
+                    {
+                        print(event.eventName!)
+                        print(startTime - 30, endTime - 30, currenTime)
+                        
+                        CheckedInEvent = event.eventName!
+                        if event.eventPrice != nil{    CheckedInEventPrice = event.eventPrice!}
+                        if event.eventCategory != nil{    CheckedInEventCategory = event.eventCategory!}
+                        eventLabel.text = "Running now... \n" + event.eventName!
+                        eventTimer = Timer.scheduledTimer(withTimeInterval: 60.0, repeats: true)
+                        { timer in
+                            // self.timeCounterCurrentEvent(event: event)
+                        }
+                        
+                        return
+                    } else if currentHour < eventStartHour {
+                        print("up next " + event.eventName!)
+                        eventLabel.text = "Up Next\n " + event.eventName!
+                        CheckedInEvent = event.eventName!
+                        if event.eventPrice != nil{    CheckedInEventPrice = event.eventPrice!}
+                        if event.eventCategory != nil{    CheckedInEventCategory = event.eventCategory!}
+                        eventTimer = Timer.scheduledTimer(withTimeInterval: 60.0, repeats: true)
+                        { timer in
+                            // self.timeCounterComingEvent(event: event)
+                        }
+                        return
                     }
                     
-                    return
-                } else if currentHour < eventStartHour {
-                    
-                    eventLabel.text = "Up Next\n " + event.eventName!
-                    eventTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true)
-                    { timer in
-                        // self.timeCounterComingEvent(event: event)
-                    }
-                    return
                 }
-                
             }
-            
             eventLabel.text = "No Events Scheduled!"
         }
         
     }
+    
+    
     
     func timeCounterCurrentEvent (event: Event) {
            

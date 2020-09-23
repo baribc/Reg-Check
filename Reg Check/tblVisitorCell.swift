@@ -15,6 +15,7 @@ class tblVisitorCell: UITableViewCell {
     @IBOutlet weak var celllblEmail: UILabel!
     @IBOutlet weak var celllblMembershipNumber: UILabel!
     @IBOutlet weak var celllblScanDate: UILabel!
+    @IBOutlet weak var celllblEvent: UILabel!
     
     
     //var localVisit = Visitor()
@@ -46,7 +47,8 @@ class tblVisitorCell: UITableViewCell {
         celllblMembershipNumber?.text = String( visitor.membershipID)
         let df = DateFormatter()
         df.locale = .current
-        df.dateFormat = "d MMM Y, hh:mm E"
+        df.dateFormat = "d MMM Y, hh:mm"
         celllblScanDate?.text = df.string(from: visitor.dateScanned!)
+        celllblEvent.text = visitor.event
     }
 }
